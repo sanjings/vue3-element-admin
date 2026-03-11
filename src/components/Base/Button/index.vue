@@ -11,18 +11,26 @@
      */
     block?: boolean;
     /**
-     * 防抖时间 默认200
+     * 防抖时间 默认300
      */
     debounce?: number;
+    /**
+     * 是否立即执行 默认true
+     */
+    debounceImmediate?: boolean;
   }>();
 
   const $emit = defineEmits<{
     (e: 'click'): void;
   }>();
 
-  const handleClick = debounce(() => {
-    $emit('click');
-  }, props.debounce ?? 200);
+  const handleClick = debounce(
+    () => {
+      $emit('click');
+    },
+    props.debounce ?? 300,
+    { leading: props.debounceImmediate ?? true, trailing: !(props.debounceImmediate ?? true) }
+  );
 </script>
 
 <template>
