@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script lang="ts" setup generic="T extends Recordable = Recordable">
   import * as components from './FormItems/index';
   import { type ElTable, type FormInstance } from 'element-plus';
   import { cloneDeep } from 'lodash-es';
@@ -20,7 +20,7 @@
     /** 工具栏配置 */
     toolbarConfig?: IToolbarConfig;
     /** 表格配置 */
-    tableConfig?: ITableConfig;
+    tableConfig?: ITableConfig<T>;
     /** 分页配置 */
     pagination?: IPaginationConfig;
   }>();
@@ -107,7 +107,7 @@
     if (!searchConfig.isExpandable) return searchConfig.formItems;
     return searchConfig.formItems.slice(0, searchConfig.isExpand ? searchConfig.formItems.length : searchcolnum.value);
   });
-  const tableData = ref(tableConfig?.dataSource);
+  const tableData = ref<T[]>((tableConfig.dataSource as T[] | undefined) || []);
   const tableTotal = ref(pagination?.total);
   const pageParams = reactive({
     page: 1,
@@ -239,7 +239,7 @@
       const res = await requestFn<PageListResponse<Recordable>>(requests.baseUrl + requests.url!, { body: params });
 
       if (res.code === 200) {
-        tableData.value = Array.isArray(res.data) ? res.data : res.data?.list || [];
+        tableData.value = (Array.isArray(res.data) ? res.data : res.data?.list || []) as T[];
         tableTotal.value = Array.isArray(res.data) ? res.data.length : Number(res.data?.count) || 0;
         $emit('onDataLoad', { tableData: tableData.value, tableTotal: tableTotal.value });
       } else {
@@ -420,7 +420,7 @@
           />
           <template v-for="(col, index) of tableConfig.columns" :key="index">
             <el-table-column
-              :prop="col.prop"
+              :prop="col.prop as string"
               :align="col.align"
               :show-overflow-tooltip="col.showOverflowTooltip"
               :label="col.label"
@@ -546,7 +546,7 @@
         display: grid;
         flex: 1;
         grid-template-columns: repeat(v-bind(searchcolnum), 1fr);
-        grid-gap: 15px;
+        gap: 15px;
 
         :deep(.el-form-item) {
           width: 100%;

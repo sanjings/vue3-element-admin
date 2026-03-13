@@ -60,7 +60,7 @@ export interface TableRequestConfig {
 /**
  * 搜索栏配置
  */
-export interface ISearchConfig<T = Recordablem> {
+export interface ISearchConfig<T = Recordable> {
   /**
    * 搜索表单项
    */
@@ -103,7 +103,7 @@ export interface ISearchConfig<T = Recordablem> {
 /**
  *  表单项
  */
-export interface ISearchFormItem<T = Recordable> {
+export interface ISearchFormItem<T extends Recordable> {
   /**
    * 自定义插槽
    */
@@ -138,7 +138,7 @@ export interface ISearchFormItem<T = Recordable> {
   /**
    * 属性字段
    */
-  prop?: string;
+  prop?: keyof T;
   /**
    * 初始值
    */
@@ -379,7 +379,7 @@ export interface IToolbarConfig {
 /**
  * 表格配置
  */
-export interface ITableConfig<T = Recordable> {
+export interface ITableConfig<T extends Recordable> {
   /**
    * 表格className
    */
@@ -460,7 +460,7 @@ export interface ITableConfig<T = Recordable> {
 /**
  * 列表
  */
-export interface TableColumn<T = Recordable> {
+export interface TableColumn<T extends Recordable> {
   /**
    * 自定义插槽
    */
@@ -468,7 +468,7 @@ export interface TableColumn<T = Recordable> {
   /**
    * 字段名称 对应列内容的字段名
    */
-  prop?: string;
+  prop?: keyof T;
   /**
    * 显示的标题
    */
