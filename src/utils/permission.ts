@@ -1,4 +1,4 @@
-import { usePermissionStore } from "@/store/permission";
+import { usePermissionStore } from '@/store/permission';
 
 export const hasPerm = (key: string) => {
   if (!key) return true;

@@ -202,7 +202,7 @@ export const useTagsViewStore = defineStore('tagsView', () => {
    * 关闭当前tagView
    */
   function closeCurrentView() {
-    const tags: TagView = {
+    const tag: TagView = {
       name: $route.name as string,
       title: $route.meta.title as string,
       path: $route.path,
@@ -211,9 +211,9 @@ export const useTagsViewStore = defineStore('tagsView', () => {
       keepAlive: $route.meta?.keepAlive,
       query: $route.query
     };
-    delView(tags).then((res: any) => {
-      if (isActive(tags)) {
-        toLastView(res.visitedViews, tags);
+    delView(tag).then((res: any) => {
+      if (isActive(tag)) {
+        toLastView(res.visitedViews, tag);
       }
     });
   }
@@ -224,10 +224,15 @@ export const useTagsViewStore = defineStore('tagsView', () => {
 
   function toLastView(visitedViews: TagView[], view?: TagView) {
     const latestView = visitedViews.slice(-1)[0];
-    if (latestView && latestView.fullPath) {
+    if (latestView?.fullPath) {
       $router.push(latestView.fullPath);
     } else {
-      $router.push('/');
+      if (view?.name === '/home') {
+        // to reload home page
+        $router.replace('/redirect' + view.fullPath);
+      } else {
+        $router.push('/');
+      }
     }
   }
 

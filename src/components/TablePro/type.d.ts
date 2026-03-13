@@ -34,7 +34,7 @@ export type IOption<T = string | number> = {
 /**
  * 请求配置
  */
-export interface TableRequestConfig {
+export interface TableRequestConfig<P extends Recordable = Recordable> {
   /**
    * 是否立即发起请求
    */
@@ -42,7 +42,7 @@ export interface TableRequestConfig {
   /**
    * 额定请求参数
    */
-  params?: Recordable;
+  params?: P;
   /**
    * 接口前缀
    */
@@ -60,11 +60,11 @@ export interface TableRequestConfig {
 /**
  * 搜索栏配置
  */
-export interface ISearchConfig<T = Recordable> {
+export interface ISearchConfig<P extends Recordable = Recordable> {
   /**
    * 搜索表单项
    */
-  formItems?: Array<ISearchFormItem<T>>;
+  formItems?: Array<ISearchFormItem<P>>;
   /**
    * 几列排布
    */
@@ -103,7 +103,7 @@ export interface ISearchConfig<T = Recordable> {
 /**
  *  表单项
  */
-export interface ISearchFormItem<T extends Recordable> {
+export interface ISearchFormItem<P extends Recordable = Recordable> {
   /**
    * 自定义插槽
    */
@@ -138,7 +138,7 @@ export interface ISearchFormItem<T extends Recordable> {
   /**
    * 属性字段
    */
-  prop?: keyof T;
+  prop?: keyof P;
   /**
    * 初始值
    */
@@ -154,7 +154,7 @@ export interface ISearchFormItem<T extends Recordable> {
   /**
    * 转换值
    */
-  transform?: (value: any, params: T) => void;
+  transform?: (value: any, params: P) => void;
 }
 
 /**
@@ -379,7 +379,7 @@ export interface IToolbarConfig {
 /**
  * 表格配置
  */
-export interface ITableConfig<T extends Recordable> {
+export interface ITableConfig<T extends Recordable = Recordable> {
   /**
    * 表格className
    */
@@ -460,7 +460,7 @@ export interface ITableConfig<T extends Recordable> {
 /**
  * 列表
  */
-export interface TableColumn<T extends Recordable> {
+export interface TableColumn<T extends Recordable = Recordable> {
   /**
    * 自定义插槽
    */

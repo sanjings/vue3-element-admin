@@ -155,7 +155,7 @@
     return true;
   };
 
-  const handleRemove: UploadProps['onRemove'] = (file, files) => {
+  const handleRemove: UploadProps['onRemove'] = (_file, files) => {
     const list = files || [];
     _fileList.value = list;
     $emit('change', list);

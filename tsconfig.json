@@ -11,6 +11,10 @@
     "moduleResolution": "bundler",
     /** TS 严格模式 */
     "strict": true,
+    /** 禁止未使用的局部变量 */
+    "noUnusedLocals": true,
+    /** 禁止未使用的函数参数 */
+    "noUnusedParameters": true,
     /** JSX 的处理方式 */
     "jsx": "preserve",
     /** 指定 JSX 工厂函数 */
@@ -22,13 +26,15 @@
     /** 从 tslib 导入辅助工具函数 */
     "importHelpers": true,
     /** 启用装饰器 */
-    "experimentalDecorators": true,
+    // "experimentalDecorators": true,
     /** 允许从没有默认导出的模块中默认导入 */
     "allowSyntheticDefaultImports": true,
     /** 强制文件名大小写一致 */
     "forceConsistentCasingInFileNames": true,
     /** 生成源映射文件 */
-    "sourceMap": true,
+    "sourceMap": false,
+    /** 仅做类型检查，不生成任何 .js / .map / .d.ts 文件 */
+    "noEmit": true,
     /** 允许导入 JSON 模块 */
     "resolveJsonModule": true,
     /** 将每个文件作为单独的模块 */

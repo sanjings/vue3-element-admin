@@ -16,11 +16,11 @@ export interface RequestLoginResponse {
   /**
    * 是否重置过密码
    */
-  isResetPassword?: number;
+  isResetPassword?: boolean | number;
 }
 
 export const requestLogin = async (params: { phone: string; password: string }) => {
-  return await {
+  return {
     code: 200,
     data: {
       phone: params.phone,
@@ -33,7 +33,14 @@ export const requestLogin = async (params: { phone: string; password: string }) 
   // return requestPost<RequestLoginResponse>('/login', params);
 };
 
-export const requestLogout = () => requestPost('/logout');
+export const requestLogout = async () => {
+  return {
+    code: 200,
+    data: null,
+    message: 'success'
+  };
+  // requestPost('/logout');
+};
 
 export const requestPasswordSet = (params: {
   phone: string;

@@ -2,12 +2,10 @@ export default {
   root: true,
   // 继承某些已有的规则
   extends: [
-    'stylelint-config-standard',
-    'stylelint-config-standard-scss',
-    'stylelint-config-html/vue',
     'stylelint-config-recommended-scss',
     'stylelint-config-recommended-vue/scss',
-    'stylelint-config-recess-order'
+    'stylelint-config-recess-order',
+    'stylelint-prettier/recommended'
   ],
   overrides: [
     {

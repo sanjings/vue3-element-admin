@@ -25,7 +25,6 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     css: {
       preprocessorOptions: {
         scss: {
-          api: 'modern-compiler', // or 'modern', 'legacy'
           additionalData: `
             @use "@/styles/variables.scss" as *;
             @use "@/styles/mixins.scss" as *;
@@ -82,20 +81,32 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     build: {
       outDir: 'dist', // 打包后输出目录
       assetsDir: 'static', // 打包后静态资源目录
-      chunkSizeWarningLimit: 1024, // 单个 chunk 文件的大小超过 1024KB 时发出警告
+      chunkSizeWarningLimit: 500, // 单个 chunk 文件的大小超过 500KB 时发出警告
       assetsInlineLimit: 4096, // 小于4kb base64转码
       reportCompressedSize: false, // 禁用 gzip 压缩大小报告
       sourcemap: false, // 构建后是否生成 source map 文件
-      rollupOptions: {
+      rolldownOptions: {
         output: {
           /**
            * 分块策略
            * 1. 注意这些包名必须存在，否则打包会报错
            * 2. 如果你不想自定义 chunk 分割策略，可以直接移除这段配置
            */
-          manualChunks: {
-            vue: ['vue', 'vue-router', 'pinia'],
-            element: ['element-plus', '@element-plus/icons-vue']
+          manualChunks: (id: string) => {
+            // 匹配 vue 相关依赖
+            if (
+              id.includes('node_modules/vue') ||
+              id.includes('node_modules/vue-router') ||
+              id.includes('node_modules/pinia')
+            ) {
+              return 'vue';
+            }
+            // 匹配 element-plus 相关依赖
+            if (id.includes('node_modules/element-plus') || id.includes('node_modules/@element-plus/icons-vue')) {
+              return 'element';
+            }
+            // 其他依赖默认走 Rolldown 自动分块
+            return null;
           }
         }
       }

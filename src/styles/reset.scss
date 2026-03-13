@@ -97,8 +97,8 @@ video {
   padding: 0;
   margin: 0;
   font: inherit;
-  border: 0;
   outline: 0;
+  border: 0;
 }
 
 h1,
@@ -150,8 +150,8 @@ select {
   padding: 0;
   margin: 0;
   line-height: 1.2;
-  border: none;
   outline: 0 none;
+  border: none;
 }
 
 audio,
@@ -186,7 +186,7 @@ blockquote::before,
 blockquote::after,
 q::before,
 q::after {
-  content: "";
+  content: '';
   content: none;
 }
 
@@ -195,8 +195,8 @@ table {
   border-collapse: collapse;
 }
 
-[type="number"]::-webkit-inner-spin-button,
-[type="number"]::-webkit-outer-spin-button {
+[type='number']::-webkit-inner-spin-button,
+[type='number']::-webkit-outer-spin-button {
   height: auto;
 }
 

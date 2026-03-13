@@ -1,22 +1,20 @@
 export const useModal = () => {
   const vm = getCurrentInstance();
-  const $emit:
-    | ((event: "onOpen" | "onClose" | "confirm", ...args: any[]) => void)
-    | undefined = vm?.emit;
+  const $emit: ((event: 'onOpen' | 'onClose' | 'confirm', ...args: any[]) => void) | undefined = vm?.emit;
 
   const confirmLoading = ref(false);
 
   const handleOpen = () => {
-    $emit?.("onOpen");
+    $emit?.('onOpen');
   };
 
   const handleClose = () => {
-    $emit?.("onClose");
+    $emit?.('onClose');
     confirmLoading.value = false;
   };
 
   const handleConfirm = () => {
-    $emit?.("confirm", confirmLoading);
+    $emit?.('confirm', confirmLoading);
   };
 
   return {
@@ -24,6 +22,6 @@ export const useModal = () => {
     confirmLoading,
     handleOpen,
     handleClose,
-    handleConfirm,
+    handleConfirm
   };
 };

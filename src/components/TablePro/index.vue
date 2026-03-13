@@ -1,4 +1,4 @@
-<script lang="ts" setup generic="T extends Recordable = Recordable">
+<script lang="ts" setup generic="T extends Recordable = Recordable, P extends Recordable = Recordable">
   import * as components from './FormItems/index';
   import { type ElTable, type FormInstance } from 'element-plus';
   import { cloneDeep } from 'lodash-es';
@@ -14,9 +14,9 @@
 
   const props = defineProps<{
     /** 查询请求配置 */
-    requests?: TableRequestConfig;
+    requests?: TableRequestConfig<P>;
     /** 搜索栏配置 */
-    searchConfig?: ISearchConfig;
+    searchConfig?: ISearchConfig<P>;
     /** 工具栏配置 */
     toolbarConfig?: IToolbarConfig;
     /** 表格配置 */
@@ -77,7 +77,7 @@
   const $slots = useSlots();
 
   const loading = ref(false);
-  const queryParams = ref<Recordable>({});
+  const queryParams = ref<P>({} as P);
   const pageRef = useTemplateRef<HTMLElement>('page');
   const tableRef = useTemplateRef<InstanceType<typeof ElTable>>('table');
   const searchFormRef = useTemplateRef<FormInstance>('searchForm');
@@ -132,13 +132,13 @@
       const initialValue = item.initialValue;
       // 只有对象和数组才需要深拷贝
       if (initialValue != undefined) {
-        queryParams.value[item.prop!] =
+        queryParams.value[item.prop] =
           Array.isArray(initialValue) || (typeof initialValue === 'object' && initialValue !== null)
             ? cloneDeep(initialValue)
             : initialValue;
         item.transform?.(initialValue, queryParams.value);
       } else if (item.type === 'number-range' || item.type === 'select-text') {
-        queryParams.value[item.prop!] = [];
+        queryParams.value[item.prop] = [];
       }
     });
   };
@@ -236,7 +236,7 @@
     try {
       loading.value = true;
       const requestFn = requests?.method?.toLowerCase?.() === 'get' ? requestGet : requestPost;
-      const res = await requestFn<PageListResponse<Recordable>>(requests.baseUrl + requests.url!, { body: params });
+      const res = await requestFn<PageListResponse<Recordable>>(requests.baseUrl + requests.url, { body: params });
 
       if (res.code === 200) {
         tableData.value = (Array.isArray(res.data) ? res.data : res.data?.list || []) as T[];
@@ -291,7 +291,7 @@
       <el-form
         ref="searchForm"
         inline
-        :model="queryParams"
+        :model="queryParams as P"
         :label-width="searchConfig.labelWidth"
         label-suffix="："
         :class="['table-pro__header--search', searchConfig.className]"
@@ -301,7 +301,7 @@
           <el-form-item
             v-else
             :label="item.label"
-            :prop="item.prop"
+            :prop="item.prop as string"
             :rules="item.rules"
             :style="{ 'grid-column-start': `span ${item.span || 1}` }"
           >
@@ -318,7 +318,7 @@
             </template>
             <component
               :is="item.type"
-              v-model="queryParams[item.prop!]"
+              v-model="queryParams.value[item.prop]"
               :params="queryParams"
               :attrs="item.attrs"
               :transform="item.transform"
@@ -416,7 +416,7 @@
             width="70"
             fixed="left"
             align="center"
-            :index="(index: number) => (pageParams.page - 1) * pageParams.pageSize! + index + 1"
+            :index="(index: number) => (pageParams.page - 1) * pageParams.pageSize + index + 1"
           />
           <template v-for="(col, index) of tableConfig.columns" :key="index">
             <el-table-column
@@ -454,13 +454,13 @@
               <template v-else-if="col.formatter" #default="scope">
                 <span
                   v-html="
-                    col.formatter?.(scope.row, scope.column, scope.row[col.prop!], scope.$index) ??
+                    col.formatter?.(scope.row, scope.column, scope.row[col.prop], scope.$index) ??
                     col.emptyText ??
                     tableConfig.cellEmptyText
                   "
                 ></span>
                 <!-- {{
-                  col.formatter?.(scope.row, scope.column, scope.row[col.prop!], scope.$index) ??
+                  col.formatter?.(scope.row, scope.column, scope.row[col.prop], scope.$index) ??
                   col.emptyText ??
                   tableConfig.cellEmptyText
                 }} -->
@@ -468,14 +468,14 @@
               <template v-else-if="col.enum" #default="scope">
                 <div class="enum-cell">
                   <span
-                    v-if="col.enum?.find((item) => item.value === scope.row[col.prop!])?.type"
-                    :class="['enum-cell-mark', col.enum?.find((item) => item.value === scope.row[col.prop!])?.type]"
+                    v-if="col.enum?.find((item) => item.value === scope.row[col.prop])?.type"
+                    :class="['enum-cell-mark', col.enum?.find((item) => item.value === scope.row[col.prop])?.type]"
                   >
                     <span class="enum-cell-mark-inner"></span>
                   </span>
                   <span>
                     {{
-                      col.enum?.find((item) => item.value === scope.row[col.prop!])?.label ??
+                      col.enum?.find((item) => item.value === scope.row[col.prop])?.label ??
                       col.emptyText ??
                       tableConfig.cellEmptyText
                     }}
@@ -484,11 +484,11 @@
               </template>
               <template v-else #default="scope">
                 <CopyBtn
-                  v-if="col.copyable && scope.row[col.prop!]"
-                  :text="scope.row[col.prop!]"
+                  v-if="col.copyable && scope.row[col.prop]"
+                  :text="scope.row[col.prop]"
                   :style="{ marginRight: '4px', verticalAlign: '-0.15em' }"
                 />
-                <span>{{ scope.row[col.prop!] ?? col.emptyText ?? tableConfig.cellEmptyText }}</span>
+                <span>{{ scope.row[col.prop] ?? col.emptyText ?? tableConfig.cellEmptyText }}</span>
               </template>
             </el-table-column>
           </template>

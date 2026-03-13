@@ -6,7 +6,7 @@ import type { TableColumn } from './type';
  * @param assignObj 待合并操作项
  * @returns
  */
-export const mergeTableColumns = <T = unknown>(
+export const mergeTableColumns = <T extends Recordable = Recordable>(
   columns: TableColumn<T>[],
   assignObj: Record<string, TableColumn<T>>
 ): TableColumn<T>[] => {

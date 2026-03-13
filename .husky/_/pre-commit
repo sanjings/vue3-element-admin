@@ -1,8 +1,2 @@
 #!/usr/bin/env sh
 . "$(dirname "$0")/h"
-
-# 执行TypeScript类型检查
-npm run ts-check
-
-# 检查暂存区代码
-npm run lint-staged

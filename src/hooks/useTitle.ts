@@ -2,7 +2,7 @@
 const { VITE_APP_TITLE } = import.meta.env;
 
 /** 动态标题 */
-const dynamicTitle = ref<string>("");
+const dynamicTitle = ref<string>('');
 
 /** 设置标题 */
 const setTitle = (title?: string) => {
