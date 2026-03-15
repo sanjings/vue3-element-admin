@@ -4,6 +4,7 @@ import AutoImport from 'unplugin-auto-import/vite';
 import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import viteCompression from 'vite-plugin-compression';
+import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import { resolve } from 'node:path';
 import { name, version, engines, dependencies, devDependencies } from './package.json';
 
@@ -69,6 +70,10 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
         dirs: ['src/components'],
         // dts: false,
         dts: 'types/components.d.ts'
+      }),
+      ViteImageOptimizer({
+        png: { quality: 95, compressionLevel: 9 },
+        jpg: { quality: 95 }
       }),
       viteCompression({
         verbose: true, // 是否显示压缩日志
