@@ -2,7 +2,7 @@
   import { requestPasswordSet, requestPasswordSendSms } from '@/services/api/user';
   import { type FormInstance, type FormRules } from 'element-plus';
   import { validatePassword, validatePhone } from '@/utils/validate';
-  import { encodeByBase64 } from '@/utils/encrypt';
+  import { encodeByBase64 } from '@/utils/encryption';
 
   defineOptions({
     name: 'Forget'

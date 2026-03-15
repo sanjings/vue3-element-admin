@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { usePermissionStore } from './permission';
+import { secureSessionStorage } from './util';
 import type { RequestLoginResponse } from '@/services/api/user';
 
 type State = {
@@ -83,6 +84,9 @@ export const useUserStore = defineStore<
   // 开启数据缓存
   persist: {
     key: 'STORE_USER',
-    storage: sessionStorage
+    storage: {
+      getItem: (key) => secureSessionStorage.getItem(key),
+      setItem: (key, value) => secureSessionStorage.setItem(key, value)
+    }
   }
 });

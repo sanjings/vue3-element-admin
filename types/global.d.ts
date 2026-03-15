@@ -7,6 +7,7 @@ declare type IntervalHandle = ReturnType<typeof setInterval>;
 declare type GetArrayItem<T> = NonNullable<T>[number];
 
 declare type RequireKey<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>;
+declare type PartialKey<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 declare interface Window {
   _AMapSecurityConfig: {
