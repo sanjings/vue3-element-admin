@@ -212,11 +212,7 @@
     $emit('onMultipleSelect', selectedRows.value);
   };
 
-  const handleSortChange = (data: {
-    column: any;
-    prop: keyof typeof queryParams.value;
-    order: 'descending' | 'ascending';
-  }) => {
+  const handleSortChange = (data: { column: any; prop: keyof P; order: 'descending' | 'ascending' }) => {
     $emit('onSortChange', data, queryParams.value);
   };
 

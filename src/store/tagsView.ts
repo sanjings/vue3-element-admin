@@ -211,7 +211,7 @@ export const useTagsViewStore = defineStore('tagsView', () => {
       keepAlive: $route.meta?.keepAlive,
       query: $route.query
     };
-    delView(tag).then((res: any) => {
+    delView(tag).then((res: { visitedViews: TagView[] }) => {
       if (isActive(tag)) {
         toLastView(res.visitedViews, tag);
       }

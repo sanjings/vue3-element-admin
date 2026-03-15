@@ -3,7 +3,7 @@ import type { UploadFile } from 'element-plus';
 /**
  * 服务端数据返回统一格式
  */
-export interface ApiResponseData<T = any> {
+export interface ApiResponseData<T = unknown> {
   /**
    * 状态码 200成功
    */
@@ -21,7 +21,7 @@ export interface ApiResponseData<T = any> {
 /**
  * 分页查询参数
  */
-export type PageQueryParam<T = Recordable> = {
+export type PageQueryParam<T extends Recordable> = {
   /**
    * 当前页码
    */
@@ -32,10 +32,12 @@ export type PageQueryParam<T = Recordable> = {
   pageSize: number;
 } & T;
 
+type Listable = Recordable | string | number;
+
 /**
  * 分页查询列表数据
  */
-export interface PageListResponse<T = Recordable | number | string> {
+export interface PageListResponse<T extends Listable = Listable> {
   /**
    * 当前列表数据
    */

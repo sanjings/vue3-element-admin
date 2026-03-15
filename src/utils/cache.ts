@@ -6,7 +6,7 @@ const { VITE_CACHE_VERSION } = import.meta.env;
  * @param value 缓存value
  * @param expires 缓存过期时间，单位：秒 默认30天
  */
-export const setCache = <T = any>(key: string, value: T, expires: number = 30 * 24 * 60 * 60): void => {
+export const setCache = <T = unknown>(key: string, value: T, expires: number = 30 * 24 * 60 * 60): void => {
   const cache = {
     value,
     version: VITE_CACHE_VERSION,
@@ -20,7 +20,7 @@ export const setCache = <T = any>(key: string, value: T, expires: number = 30 * 
  * @param key 缓存key
  * @returns 缓存value
  */
-export const getCache = <T = any>(key: string): T | null => {
+export const getCache = <T = unknown>(key: string): T | null => {
   const dataStr = localStorage.getItem(key);
   if (!dataStr) return null;
   const cache = JSON.parse(dataStr);

@@ -1,7 +1,10 @@
 /**
  * 时间区间默认时分秒
  */
-export const DEFAULT_DATE_RANGE_TIME: [Date, Date] = [new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 2, 1, 23, 59, 59)];
+export const DEFAULT_DATE_RANGE_TIME: [Date, Date] = [
+  new Date(2000, 1, 1, 0, 0, 0),
+  new Date(2000, 2, 1, 23, 59, 59)
+] as const;
 
 /**
  * 时间区间选择器快捷选项
@@ -82,4 +85,4 @@ export const MESSAGE_BOX_OPTION = {
   dangerouslyUseHTMLString: true,
   showClose: true,
   appendTo: 'body'
-};
+} as const;

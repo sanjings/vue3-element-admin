@@ -171,19 +171,19 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-const requestGet = <T = any>(
+const requestGet = <T = unknown>(
   url: string,
   params?: Recordable,
   config?: AxiosRequestConfig
 ): Promise<ApiResponseData<T>> => axiosInstance.get(url, { params, ...config });
 
-const requestPost = <T = any>(
+const requestPost = <T = unknown>(
   url: string,
   params?: Recordable,
   config?: AxiosRequestConfig
 ): Promise<ApiResponseData<T>> => axiosInstance.post(url, params, config);
 
-const requestPut = <T = any>(
+const requestPut = <T = unknown>(
   url: string,
   params?: Recordable,
   config?: AxiosRequestConfig
@@ -200,9 +200,9 @@ interface DownloadResponse extends AxiosResponse {
  * @param method 请求方法
  * @param fileType 文件类型
  */
-const requestDownFile = async (
+const requestDownFile = async <T extends Recordable>(
   url: string,
-  params: Record<string, any>,
+  params: T,
   method: 'GET' | 'POST' = 'POST',
   fileType = DEFAULT_FILE_TYPE
 ): Promise<Blob> => {

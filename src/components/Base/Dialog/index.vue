@@ -93,9 +93,9 @@
   }>();
 
   const $slots = defineSlots<{
-    header?: () => any;
-    default?: () => any;
-    footer?: () => any;
+    header?: () => VNode[];
+    default?: () => VNode[];
+    footer?: () => VNode[];
   }>();
   const visible = defineModel<boolean>();
   const { confirmLoading, handleOpen, handleClose, handleConfirm } = useModal();

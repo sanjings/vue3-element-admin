@@ -5,7 +5,7 @@ import type { ApiResponseData } from 'types/api';
 
 const { VITE_HTTP_BASE_URL } = import.meta.env;
 
-export default async function request<T = any>(
+export default async function request<T = unknown>(
   { method, path, data }: RequestFunctionParams,
   options?: AxiosRequestConfig
 ): Promise<ApiResponseData<T>> {
