@@ -5,6 +5,7 @@ import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import viteCompression from 'vite-plugin-compression';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import { visualizer } from 'rollup-plugin-visualizer';
 import { resolve } from 'node:path';
 import { name, version, engines, dependencies, devDependencies } from './package.json';
 
@@ -81,7 +82,8 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
         threshold: 10240, // 大于10kb的文件gzip压缩
         algorithm: 'gzip', // 压缩算法
         ext: '.gz' // 压缩后的文件扩展名
-      })
+      }),
+      visualizer()
     ],
     build: {
       outDir: 'dist', // 打包后输出目录
@@ -98,17 +100,21 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
            * 2. 如果你不想自定义 chunk 分割策略，可以直接移除这段配置
            */
           manualChunks: (id: string) => {
-            // 匹配 vue 相关依赖
-            if (
-              id.includes('node_modules/vue') ||
-              id.includes('node_modules/vue-router') ||
-              id.includes('node_modules/pinia')
-            ) {
-              return 'vue';
-            }
-            // 匹配 element-plus 相关依赖
-            if (id.includes('node_modules/element-plus') || id.includes('node_modules/@element-plus/icons-vue')) {
-              return 'element';
+            if (id.includes('node_modules')) {
+              const parts = id.split('node_modules');
+              const pkgPath = parts.length > 1 ? parts.slice(1).join('node_modules') : '';
+              if (!pkgPath) return null;
+
+              // Element Plus 全家桶（包含图标）
+              if (/element-plus/.test(pkgPath)) return 'element';
+              // Vue 生态（vue + vue-router + pinia + @vue/*）
+              if (/vue|pinia/.test(pkgPath)) return 'vue';
+              // 视频播放器（体积大，单独分包）
+              if (/video\.?js/.test(pkgPath)) return 'video';
+              // 图片预览库
+              if (/viewerjs|v-viewer/.test(pkgPath)) return 'viewer';
+
+              return 'vendor';
             }
             // 其他依赖默认走 Rolldown 自动分块
             return null;

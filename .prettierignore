@@ -5,6 +5,7 @@
 **/*.svg
 **/*.sh
 /public/*
+/stats.*
 components.d.ts
 auto-imports.d.ts
 /src/services/yapi/**

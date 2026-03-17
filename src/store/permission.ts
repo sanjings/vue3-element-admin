@@ -3,8 +3,7 @@ import { defineStore } from 'pinia';
 import { type RouteRecordRaw } from 'vue-router';
 import { constantRoutes } from '@/router/routes';
 
-const VIEWS_BASE_PATH = '../views';
-const modules = import.meta.glob(`${VIEWS_BASE_PATH}/**/**.vue`);
+const modules = import.meta.glob('../views/**/**.vue');
 
 type State = {
   /**
@@ -39,11 +38,11 @@ const transformRoutes = (routes: RequestPermissionMenuResponse): RouteRecordRaw[
       if (route.children?.length && +route.children[0].type! === 1) {
         tmpRoute.redirect = route.children[0].redirect;
       } else {
-        const component = modules[`${VIEWS_BASE_PATH}${route.redirect}/index.vue`];
+        const component = modules[`../views${route.redirect}/index.vue`];
         if (component) {
           tmpRoute.component = component;
         } else {
-          tmpRoute.component = modules[`${VIEWS_BASE_PATH}/error/404/index.vue`];
+          tmpRoute.component = modules[`../views/error/404/index.vue`];
         }
       }
     }
