@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import { type RouteRecordRaw } from 'vue-router';
 import { constantRoutes } from '@/router/routes';
 
-const modules = import.meta.glob('../views/**/**.vue');
+const modules = import.meta.glob(['../views/**/index.vue', '!../views/**/components/**']);
 
 type State = {
   /**
