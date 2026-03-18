@@ -6,6 +6,7 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import viteCompression from 'vite-plugin-compression';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 import { visualizer } from 'rollup-plugin-visualizer';
+import VueDevTools from 'vite-plugin-vue-devtools';
 import { resolve } from 'node:path';
 import { name, version, engines, dependencies, devDependencies } from './package.json';
 
@@ -82,6 +83,9 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
         threshold: 10240, // 大于10kb的文件gzip压缩
         algorithm: 'gzip', // 压缩算法
         ext: '.gz' // 压缩后的文件扩展名
+      }),
+      VueDevTools({
+        launchEditor: 'cursor'
       }),
       visualizer()
     ],
