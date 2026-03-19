@@ -26,6 +26,7 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
       }
     },
     css: {
+      transformer: 'lightningcss',
       preprocessorOptions: {
         scss: {
           additionalData: `
