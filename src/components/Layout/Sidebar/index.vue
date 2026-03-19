@@ -4,7 +4,6 @@
   import { useAppStore } from '@/store/app';
   import { usePermissionStore } from '@/store/permission';
   import { useRoute } from 'vue-router';
-  import variables from '@/styles/variables.module.scss';
 
   defineOptions({
     name: 'Sidebar'
@@ -35,9 +34,9 @@
       :default-active="activeMenu"
       :collapse="appStore.sidebar.isCollapse"
       :collapse-transition="false"
-      :background-color="variables['menu-bg']"
-      :text-color="variables['menu-text']"
-      :active-text-color="variables['menu-active-text']"
+      background-color="var(--menu-bg)"
+      text-color="var(--menu-text)"
+      active-text-color="var(--menu-active-text)"
       unique-opened
       router
     >

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import variables from '@/styles/variables.module.scss';
+import { getCssVar } from '@/utils/css-var';
 
 type State = {
   /**
@@ -34,14 +34,17 @@ export const useAppStore = defineStore<
     return {
       sidebar: {
         isCollapse: window.innerWidth <= MIN_SCREEN_WIDTH,
-        width: variables[window.innerWidth <= MIN_SCREEN_WIDTH ? 'sidebar-width-collapse' : 'sidebar-width']
+        width:
+          window.innerWidth <= MIN_SCREEN_WIDTH ? getCssVar('--sidebar-width-collapse') : getCssVar('--sidebar-width')
       }
     };
   },
   actions: {
     toggleSidebar() {
       this.sidebar.isCollapse = !this.sidebar.isCollapse;
-      this.sidebar.width = variables[this.sidebar.isCollapse ? 'sidebar-width-collapse' : 'sidebar-width'];
+      this.sidebar.width = this.sidebar.isCollapse
+        ? getCssVar('--sidebar-width-collapse')
+        : getCssVar('--sidebar-width');
     }
   }
 });

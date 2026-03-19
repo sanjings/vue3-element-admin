@@ -1,15 +1,15 @@
 <script lang="ts" setup generic="T extends Recordable = Recordable, P extends Recordable = Recordable">
-  import * as components from './FormItems/index';
+  import { FormItemComponents } from './FormItems/index';
   import { type ElTable, type FormInstance } from 'element-plus';
   import { cloneDeep } from 'lodash-es';
-  import variables from '@/styles/variables.module.scss';
+  import { useAppStore } from '@/store/app';
   import { requestDownFile, requestGet, requestPost } from '@/services/util';
   import type { TableRequestConfig, ISearchConfig, IToolbarConfig, ITableConfig, IPaginationConfig } from './type';
   import type { PageListResponse } from 'types/api';
 
   defineOptions({
     name: 'TablePro',
-    components: components
+    components: FormItemComponents
   });
 
   const props = defineProps<{
@@ -25,9 +25,9 @@
     pagination?: IPaginationConfig;
   }>();
 
-  const requests = reactive({
+  const requests = reactive<TableRequestConfig<P>>({
     immediately: true,
-    params: {},
+    params: {} as P,
     baseUrl: import.meta.env.VITE_HTTP_BASE_URL,
     method: 'POST',
     ...props.requests
@@ -76,8 +76,9 @@
   ]);
   const $slots = useSlots();
 
+  const appStore = useAppStore();
   const loading = ref(false);
-  const queryParams = ref<P>({} as P);
+  const queryParams = ref<P>(cloneDeep(requests.params) as P);
   const pageRef = useTemplateRef<HTMLElement>('page');
   const tableRef = useTemplateRef<InstanceType<typeof ElTable>>('table');
   const searchFormRef = useTemplateRef<FormInstance>('searchForm');
@@ -98,9 +99,7 @@
   const searchcolnum = computed(
     () =>
       searchConfig?.col ||
-      Math.round(
-        (pageRef.value?.offsetWidth || Number(windowWidth.value - parseFloat(variables['sidebar-width']))) / 445
-      ) ||
+      Math.round((pageRef.value?.offsetWidth || Number(windowWidth.value - parseInt(appStore.sidebar.width))) / 445) ||
       4
   );
   const searchItems = computed(() => {
@@ -130,8 +129,8 @@
     queryParams.value = cloneDeep(requests.params);
     searchConfig.formItems?.forEach?.((item) => {
       const initialValue = item.initialValue;
-      // 只有对象和数组才需要深拷贝
       if (initialValue != undefined) {
+        // 只有对象和数组才需要深拷贝
         queryParams.value[item.prop] =
           Array.isArray(initialValue) || (typeof initialValue === 'object' && initialValue !== null)
             ? cloneDeep(initialValue)
@@ -232,7 +231,7 @@
     try {
       loading.value = true;
       const requestFn = requests?.method?.toLowerCase?.() === 'get' ? requestGet : requestPost;
-      const res = await requestFn<PageListResponse<Recordable>>(requests.baseUrl + requests.url, { body: params });
+      const res = await requestFn<PageListResponse<Recordable>>(requests.baseUrl! + requests.url, { body: params });
 
       if (res.code === 200) {
         tableData.value = (Array.isArray(res.data) ? res.data : res.data?.list || []) as T[];
@@ -314,7 +313,7 @@
             </template>
             <component
               :is="item.type"
-              v-model="queryParams.value[item.prop]"
+              v-model="(queryParams as any)[item.prop]"
               :params="queryParams"
               :attrs="item.attrs"
               :transform="item.transform"
