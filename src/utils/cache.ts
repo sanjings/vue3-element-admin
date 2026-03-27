@@ -42,3 +42,8 @@ export const getCache = <T = unknown>(key: string): T | null => {
 export const removeCache = (key: string): void => {
   localStorage.removeItem(key);
 };
+
+/**
+ * 清空缓存
+ */
+export const clearCache = () => localStorage.clear();

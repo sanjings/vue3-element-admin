@@ -16,6 +16,4 @@ watch(dynamicTitle, (value: string, oldValue: string) => {
   }
 });
 
-export function useTitle() {
-  return { setTitle };
-}
+export const useTitle = () => ({ setTitle });
