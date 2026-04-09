@@ -12,7 +12,7 @@ const getFormatName = (str: string) => {
 
 export default defineConfig([
   {
-    serverUrl: 'http://172.27.2.33:3000/',
+    serverUrl: 'http://xxx.com:3000/',
     serverType: 'yapi',
     target: 'typescript',
     typesOnly: false,
@@ -22,7 +22,7 @@ export default defineConfig([
     dataKey: 'data',
     projects: [
       {
-        token: '67193f92f05296996b27bdd4bd1a342feba149ee22760b49c8161570c904f269',
+        token: 'xxx',
         categories: [
           {
             id: 0,
