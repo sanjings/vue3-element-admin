@@ -41,6 +41,7 @@ router.beforeEach(async (to, from) => {
     ].forEach((route: RouteRecordRaw) => router.addRoute('/', route));
     return { ...to, replace: true };
   } catch (error) {
+    console.error('[permissionRouter]: 加载动态权限路由失败', error);
     userStore.resetToken();
     userStore.resetUserInfo();
     return {

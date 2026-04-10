@@ -72,13 +72,15 @@ export const useUserStore = defineStore<
     logout(redirect) {
       this.resetToken();
       this.resetUserInfo();
-      usePermissionStore()?.clearPermission();
-      redirect
-        ? this.$router.replace({
-            path: '/login',
-            query: { redirect: encodeURIComponent(redirect) }
-          })
-        : this.$router.replace({ path: '/login' });
+      try {
+        usePermissionStore().clearPermission();
+      } catch {
+        // permissionStore 可能未初始化
+      }
+      this.$router.replace({
+        path: '/login',
+        query: redirect ? { redirect: encodeURIComponent(redirect) } : {}
+      });
     }
   },
   // 开启数据缓存
