@@ -65,8 +65,7 @@
               v-model.trim="formState.phone"
               placeholder="请输入您的手机号"
               maxlength="11"
-              prefix-icon="iphone"
-            />
+              prefix-icon="iphone" />
           </el-form-item>
           <el-form-item prop="password">
             <el-input
@@ -74,8 +73,7 @@
               v-model.trim="formState.password"
               show-password
               placeholder="请输入您的密码"
-              prefix-icon="lock"
-            />
+              prefix-icon="lock" />
           </el-form-item>
           <div class="flex-row-end" style="margin-bottom: 20px">
             <el-button link @click="formType = 'forget'">忘记密码</el-button>

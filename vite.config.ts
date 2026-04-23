@@ -16,6 +16,10 @@ const pathResolve = (dir: string) => resolve(__dirname, dir);
 export default ({ mode }: ConfigEnv): UserConfigExport => {
   const viteEnv = loadEnv(mode, process.cwd()) as ImportMetaEnv;
   const { VITE_PUBLIC_PATH, VITE_HTTP_BASE_URL } = viteEnv;
+  const isBuild = mode === 'production';
+  const dockerDev = process.env.DOCKER_DEV === 'true';
+  const hmrClientPort = Number(process.env.VITE_DEV_HMR_CLIENT_PORT || 5173);
+  const watchPollInterval = Number(process.env.VITE_WATCH_POLL_INTERVAL || 1200);
 
   return defineConfig({
     base: VITE_PUBLIC_PATH,
@@ -39,15 +43,22 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
     server: {
       host: '0.0.0.0', // 设置 host
       port: 5173, // 端口号
-      hmr: true, // 热更新
       open: false, // 是否自动打开浏览器
       cors: true, // 跨域设置允许
       strictPort: false, // 端口被占用时，是否直接退出
+      watch: dockerDev
+        ? {
+            ignored: ['**/node_modules/**', '**/dist/**', '**/.git/**', '**/.pnpm-store/**'],
+            usePolling: true,
+            interval: watchPollInterval
+          }
+        : undefined,
+      hmr: dockerDev ? { protocol: 'ws', host: 'localhost', clientPort: hmrClientPort } : true,
       proxy: {
         [VITE_HTTP_BASE_URL]: {
-          target: 'http://localhost:5173',
+          target: 'http://localhost:3000',
           changeOrigin: true
-          // rewrite: (path) => path.replace(/^\/${VITE_HTTP_BASE_URL}/, ""),
+          // rewrite: (path) => path.replace(/^\/${VITE_HTTP_BASE_URL}/, '')
         }
       }
     },
@@ -74,21 +85,29 @@ export default ({ mode }: ConfigEnv): UserConfigExport => {
         // dts: false,
         dts: 'types/components.d.ts'
       }),
-      ViteImageOptimizer({
-        png: { quality: 95, compressionLevel: 9 },
-        jpg: { quality: 95 }
-      }),
-      viteCompression({
-        verbose: true, // 是否显示压缩日志
-        disable: false, // 是否禁用压缩
-        threshold: 10240, // 大于10kb的文件gzip压缩
-        algorithm: 'gzip', // 压缩算法
-        ext: '.gz' // 压缩后的文件扩展名
-      }),
-      VueDevTools({
-        launchEditor: 'cursor'
-      }),
-      visualizer()
+      ...(!dockerDev
+        ? [
+            VueDevTools({
+              launchEditor: 'cursor'
+            })
+          ]
+        : []),
+      ...(isBuild
+        ? [
+            ViteImageOptimizer({
+              png: { quality: 95, compressionLevel: 9 },
+              jpg: { quality: 95 }
+            }),
+            viteCompression({
+              verbose: true, // 是否显示压缩日志
+              disable: false, // 是否禁用压缩
+              threshold: 10240, // 大于10kb的文件gzip压缩
+              algorithm: 'gzip', // 压缩算法
+              ext: '.gz' // 压缩后的文件扩展名
+            }),
+            visualizer()
+          ]
+        : [])
     ],
     build: {
       outDir: 'dist', // 打包后输出目录

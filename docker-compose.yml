@@ -1,0 +1,19 @@
+name: vue3-element-admin
+
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    command: pnpm run dev:docker
+    ports:
+      - '16666:5173'
+    environment:
+      # Docker 开发：由 Vite 内 watch 低频轮询 + HMR clientPort，避免全局 CHOKIDAR 拖慢
+      DOCKER_DEV: true
+      VITE_DEV_HMR_CLIENT_PORT: '16666'
+      VITE_WATCH_POLL_INTERVAL: '1200'
+    volumes:
+      - .:/app
+      - /app/node_modules
