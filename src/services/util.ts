@@ -162,7 +162,7 @@ axiosInstance.interceptors.response.use(
     return responseData;
   },
   (error: AxiosError) => {
-    // 请求失败，从 pendingRequests 中移除（重新生成 key）
+    // 请求失败，从 pendingRequests 中移除
     if (error.config) {
       const requestKey = generateRequestKey(error.config);
       removePendingRequest(requestKey);
