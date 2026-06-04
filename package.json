@@ -89,15 +89,14 @@
     "vue-tsc": "^3.2.5",
     "yapi-to-typescript": "3.38.0"
   },
-  "resolutions": {
-    "vite": "8.0.0"
-  },
   "browserslist": [
     "> 1%",
     "last 2 versions",
     "not dead"
   ],
+  "packageManager": "pnpm@11.5.0",
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=22.0.0",
+    "pnpm": ">=11.5.0"
   }
 }
